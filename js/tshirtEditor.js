@@ -7,22 +7,43 @@ var line2;
 var line3;
 var line4;
  	$(document).ready(function() {
-		//setup front side canvas 
+		//setup front side canvas
  		canvas = new fabric.Canvas('tcanvas', {
 		  hoverCursor: 'pointer',
 		  selection: true,
 		  selectionBorderColor:'blue'
 		});
  		canvas.on({
-			 'object:moving': function(e) {		  	
+			 'object:moving': function(e) {
 			    e.target.opacity = 0.5;
 			  },
-			  'object:modified': function(e) {		  	
+			  'object:modified': function(e) {
 			    e.target.opacity = 1;
 			  },
 			 'object:selected':onObjectSelected,
 			 'selection:cleared':onSelectedCleared
 		 });
+		document.getElementById('uploadedImg').onchange = function handleImage(e) {
+		   var reader = new FileReader();
+				reader.onload = function (event){
+			    var imgObj = new Image();
+			    imgObj.src = event.target.result;
+			    imgObj.onload = function () {
+			      var image = new fabric.Image(imgObj);
+			      image.set({
+				    angle: 0,
+				    padding: 10,
+				    cornersize:10,
+				    height:110,
+				    width:110,
+			      });
+			      canvas.centerObject(image);
+			      canvas.add(image);
+			      canvas.renderAll();
+			    }
+			  }
+			  reader.readAsDataURL(e.target.files[0]);
+		};
 		// piggyback on `canvas.findTarget`, to fire "object:over" and "object:out" events
  		canvas.findTarget = (function(originalFn) {
 		  return function() {
@@ -66,9 +87,9 @@ var line4;
 		      scaleY: 0.5,
 		      fontWeight: '',
 	  		  hasRotatingPoint:true
-		    });		    
-            canvas.add(textSample);	
-            canvas.item(canvas.item.length-1).hasRotatingPoint = true;    
+		    });
+            canvas.add(textSample);
+            canvas.item(canvas.item.length-1).hasRotatingPoint = true;
             $("#texteditor").css('display', 'block');
             $("#imageeditor").css('display', 'block');
 	  	};
