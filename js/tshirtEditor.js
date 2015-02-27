@@ -24,7 +24,8 @@ var line4;
 			 'selection:cleared':onSelectedCleared
 		 });
 		document.getElementById('uploadedImg').onchange = function handleImage(e) {
-		   var reader = new FileReader();
+				canvas.getObjects().pop() // deletes existing item.
+				var reader = new FileReader();
 				reader.onload = function (event){
 			    var imgObj = new Image();
 			    imgObj.src = event.target.result;
